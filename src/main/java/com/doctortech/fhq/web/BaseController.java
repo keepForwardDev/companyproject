@@ -83,8 +83,8 @@ public class BaseController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
-    public CommonRespon noLogin(CommonRespon respon) {
-        /*CommonRespon respon = new CommonRespon();*/
+    public CommonRespon noLogin() {
+        CommonRespon respon = new CommonRespon();
         respon.setCode(Const.CODE_NO_LOGIN);
         respon.setMsg(Const.CODE_NO_LOGIN_STR);
         return respon;
@@ -92,5 +92,19 @@ public class BaseController {
 
     public String getIp() {
         return DruidWebUtils.getRemoteAddr(getRequest());
+    }
+
+    public CommonRespon success() {
+        CommonRespon respon = new CommonRespon();
+        respon.setCode(Const.CODE_SUCCESS);
+        respon.setMsg(Const.CODE_SUCCESS_STR);
+        return respon;
+    }
+
+    public CommonRespon faild() {
+        CommonRespon respon = new CommonRespon();
+        respon.setCode(Const.CODE_ERROR);
+        respon.setMsg(Const.CODE_ERROR_STR);
+        return respon;
     }
 }

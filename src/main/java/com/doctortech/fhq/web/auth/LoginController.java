@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 public class LoginController extends BaseController {
     @Autowired
@@ -71,6 +76,42 @@ public class LoginController extends BaseController {
         return REDIRECT + "/";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/vueLogin",method = RequestMethod.POST)
+    public CommonRespon vueLogin(String userName,String password) {
+        Subject currentUser = ShiroKit.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(userName, password.toCharArray());
+        token.setRememberMe(false);
+        currentUser.login(token);
+        ShiroUser shiroUser = ShiroKit.getUser();
+        super.getSession().setAttribute("shiroUser", shiroUser);
+        super.getSession().setAttribute("userName", shiroUser.getAccount());
+        ShiroKit.getSession().setAttribute("sessionFlag", true);
+        CommonRespon res= success();
+        res.setData(super.getSession().getId());
+        return res;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/getUserInfo",method = RequestMethod.GET)
+    public CommonRespon getUserInfo() {
+        ShiroUser currentUser = getCurrentUser();
+        Map<String,Object> res= new HashMap<>();
+        res.put("userName",currentUser.getName());
+        res.put("avtar",currentUser.getAvatar());
+        List<String> access= new ArrayList<>();
+        currentUser.getMenu().forEach(m ->{
+            access.add(m.getName());
+        });
+        res.put("resources",currentUser.getResourcesCode());
+        res.put("access",access);
+        res.put("userId",currentUser.getId());
+        res.put("departmentName",currentUser.getDepartmentName());
+        res.put("roleName",currentUser.getRoleName());
+        CommonRespon responese= success();
+        responese.setData(res);
+        return responese;
+    }
 
     /**
      * 退出登录

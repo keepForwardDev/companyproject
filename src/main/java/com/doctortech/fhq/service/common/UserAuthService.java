@@ -12,6 +12,7 @@ import com.doctortech.fhq.repository.mapper.common.ResourceMapper;
 import com.doctortech.fhq.repository.mapper.common.RoleMapper;
 import com.doctortech.fhq.utils.SpringUtils;
 import com.doctortech.framework.common.shiro.ShiroUser;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -57,6 +58,11 @@ public class UserAuthService {
         BeanUtils.copyProperties(user, shiroUser);
         //获取角色
         List<Role> roles = roleDao.getUserRoles(user.getId());
+        StringBuilder sf= new StringBuilder();
+        roles.forEach( r->{
+            sf.append(r.getName()).append(" ");
+        });
+        shiroUser.setRoleName(sf.toString());
         //角色id
         List<Long> rolesId = new ArrayList<>();
         roles.forEach(role -> {

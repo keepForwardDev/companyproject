@@ -62,6 +62,11 @@ public class User extends CommonModel<User> {
      */
     private Long deptId;
 
+    /**
+     * 部门名称，方便查询，更新需要维护
+     */
+    private String departmentName;
+
     private Long areaId;
 
     private Integer enabled=1; //0 禁用，1 启用
@@ -164,5 +169,13 @@ public class User extends CommonModel<User> {
 
     public void setAreaId(Long areaId) {
         this.areaId = areaId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }

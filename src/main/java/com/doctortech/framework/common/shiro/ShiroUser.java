@@ -12,6 +12,8 @@ public class ShiroUser implements Serializable {
 
     private Long deptId;
 
+    private String departmentName;
+
     private Long areaId;
 
     /**
@@ -58,6 +60,8 @@ public class ShiroUser implements Serializable {
      * 菜单列表
      */
     private List<Router> menu= new ArrayList<>();
+
+    private String roleName;
 
     public Long getId() {
         return id;
@@ -153,5 +157,21 @@ public class ShiroUser implements Serializable {
 
     public void setMenu(List<Router> menu) {
         this.menu = menu;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }
