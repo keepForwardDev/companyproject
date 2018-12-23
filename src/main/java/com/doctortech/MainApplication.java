@@ -30,8 +30,6 @@ import java.util.Date;
  *
  */
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, org.activiti.spring.boot.SecurityAutoConfiguration.class//禁用 activi 登录功能
-})
 public class MainApplication extends SpringBootServletInitializer implements EmbeddedServletContainerCustomizer{
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
