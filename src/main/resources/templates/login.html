@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>博士科技运营系统</title>
+    <link href="/pc/css/login.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        <form action="/login" method="post">
+            <div class="container">
+                <div id="container">
+                    <table width="100%">
+                        <tbody>
+                            <tr>
+                                <td width="461px" height="295px" valign="top">
+                                    <div class="login_logo" style="text-align: center;margin-top: 26px;"><img src="/pc/images/pic_login_01.jpg" alt="博士logo"></div>
+                                    <ul class="login_input" style="padding-left: 92px;margin-top: 30px;">
+                                      <li><label for="account" style="    color: #FFF;">帐&nbsp;号</label><input type="text" name="userName" class="input_pas" value="${userName!}" ></li>
+                                      <li><label for="password">密&nbsp;码</label><input type="password" name="password" class="input_pas"></li>
+                                      <% if(openkaptcha) { %>
+                                             <li>
+                                                 <label for="verification">验证码</label><input type="text" name="kaptcha" class="input_ver" value="${password!}">
+                                                 <img src="/kaptcha" alt="验证码" title="点击图片，更换验证码" id="captcha_img" onclick="refreshKaptcha(this)">
+                                                 <span style="color: #FF6347">${tips!}</span>
+                                             </li>
+                                       <% }%>
+                                    </ul>
+                            <div class="login_but">
+                                <input type="submit" id="loginButton" value="登录" class="but_login">
+                            </div>
+                        </td>
+                            <td width="12px"></td>
+                            <td valign="top" style="border-left:1px dotted #C14356">
+
+                                <div style="overflow-x:hidden;overflow-y:auto;height:295px" class="loginVersionTip">
+                                    <ul>
+                                        <h3>新运营系统<br>更新说明：</h3>
+                                        1.运营系统改版啦运营系统改版啦运营系统改版啦运营系统改版啦运营系统改版啦。<br>
+                                        2.全新的UI设计，冲击你的视觉<br>
+                                        3.流畅的操作体验，让你不在烦恼
+                                    </ul></a>
+                                    <div id="services_item">
+                                    </div>
+                                </div>
+
+                            </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="footer_login">版权所有 © 2005-2011 Doctor-club.com.cn All Rights Reserved</div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        function refreshKaptcha(obj) {
+            document.getElementById("captcha_img").src="/kaptcha?v="+new Date().getTime();
+        }
+    </script>
+</body>
+</html>

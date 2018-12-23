@@ -1,0 +1,95 @@
+beetl:
+  resource-auto-check: true       #热加载beetl模板，开发时候用
+  templatesPath: /templates
+  viewResolver:
+    suffix: .html
+spring:
+  profiles:
+      active: produce
+  #devtools:
+    #restart:
+      #enabled: false
+      #additional-paths: src/main/java
+      #exclude: static/**,templates/**
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+  jpa:
+      hibernate:
+        ddl-auto: update #create 启动时删数据库中的表，然后创建，退出时不删除数据表 create-drop 启动时删数据库中的表，然后创建，退出时删除数据表 如果表不存在报错 update 如果启动时表格式不一致则更新表，原有数据保留validate 项目启动表结构进行校验 如果不一致则报错
+        naming:
+          physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy # 遇到大写加_
+      show-sql: false
+      #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+company:
+  properties: #自定义参数  在CustomProperties获取
+    superPassword: boshikeji            #超级密码登录
+    openkaptcha: false                  #是否开启验证码
+    sessionValidationInterval: 900      # session验证失效时间 单位为秒
+    sessionInvalidateTime: 1800         #session失效时间 单位为秒
+    anonUrl: /pc/**,/login,/kaptcha #无需登录访问地址
+    openSwagger: true
+    termsOfServiceUrl: http://localhost  #开启swgger的接口文档
+log:
+  path: app-log
+server:
+  port: 80
+  tomcat:
+    uri-encoding: UTF-8
+
+mybatis-plus:
+  mapper-locations: classpath*:com/doctortech/fhq/repository/mapping/**/*.xml
+
+---
+#本地环境
+spring:
+  profiles: local
+  datasource:
+        url: jdbc:log4jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+        username: root
+        password: 123456
+        driverClassName: net.sf.log4jdbc.DriverSpy #输出执行sql与执行时间
+        initialSize: 2         #初始化连接数
+        minIdle: 1             #最小空闲数
+        maxActive: 20          #最大连接数
+        maxWait: 60000         #最长等待时间 ms
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 1=1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+        type: com.alibaba.druid.pool.DruidDataSource
+
+---
+#生产环境
+spring:
+  profiles: produce
+  datasource:
+        url: jdbc:log4jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+        username: root
+        password: 123456
+        driverClassName: net.sf.log4jdbc.DriverSpy #输出执行sql与执行时间
+        initialSize: 2         #初始化连接数
+        minIdle: 1             #最小空闲数
+        maxActive: 20          #最大连接数
+        maxWait: 60000         #最长等待时间 ms
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 1=1
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat
+        type: com.alibaba.druid.pool.DruidDataSource

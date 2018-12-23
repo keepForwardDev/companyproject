@@ -1,0 +1,103 @@
+body {
+    background: url(/pc/images/bg_login.jpg) repeat-x;
+    font-size: 12px;
+    font-family: Arial,宋体;
+    line-height: 180%;
+    font-weight: normal;
+    color: #000;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+.container {
+    width: 100%;
+    margin: 0 auto
+}
+
+#container {
+    width:801px;
+    height: 295px;
+    background: url(/pc/images/bg_middle_login.png) no-repeat;
+    position: absolute;
+    margin-top: -174px;
+    margin-left: -330px;
+    left: 50%;
+    top: 50%;
+}
+
+ul li {
+    list-style: none;
+}
+.login_logo {
+    text-align: center;
+    margin-top: 26px;
+}
+.login_input {
+    padding-left: 92px;
+    margin-top: 30px;
+}
+.login_input li {
+    height: 24px;
+    line-height: 24px;
+    margin-bottom: 9px;
+    clear: both;
+}
+.login_input label {
+    color: #FFF;
+    display: block;
+    width: 48px;
+    float: left;
+    word-spacing: 9px;
+}
+
+.login_input .input_pas {
+    background: url(/pc/images/input_login_01.jpg) no-repeat;
+    border: 0;
+    width: 168px;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 12px;
+    margin-left: 18px;
+}
+
+.login_input .input_ver {
+    background: url(/pc/images/input_login_02.jpg) no-repeat;
+    border: 0;
+    width: 70px;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 12px;
+    margin-left: 18px;
+}
+
+.login_input img {
+    vertical-align: top;
+    cursor: pointer;
+    width: 94px;
+    height: 24px;
+}
+.login_but {
+    text-align: center;
+    padding-top: 9px;
+}
+.but_login {
+    background: url(/pc/images/but_login.jpg) no-repeat;
+    width: 59px;
+    height: 26px;
+    line-height: 26px;
+    border: 0;
+    color: #FFF;
+    font-weight: bold;
+}
+
+.footer_login {
+    background: url(/pc/images/bg_foot_login.jpg) repeat-x;
+    height: 34px;
+    text-align: center;
+    padding-top: 22px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
