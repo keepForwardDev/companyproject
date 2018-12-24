@@ -22,6 +22,9 @@ spring:
           physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy # 遇到大写加_
       show-sql: false
       database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  activiti: # 工作流配置
+      check-process-definitions: false
+      async-executor-activate: false
   http:
     encoding:
       force: true
