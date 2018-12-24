@@ -5,7 +5,7 @@ beetl:
     suffix: .html
 spring:
   profiles:
-      active: produce
+      active: local
   #devtools:
     #restart:
       #enabled: false
@@ -23,8 +23,8 @@ spring:
       show-sql: false
       database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   activiti: # 工作流配置
-      check-process-definitions: false
-      async-executor-activate: false
+        check-process-definitions: false
+        async-executor-activate: false
   http:
     encoding:
       force: true
@@ -36,7 +36,7 @@ company:
     openkaptcha: false                  #是否开启验证码
     sessionValidationInterval: 900      # session验证失效时间 单位为秒
     sessionInvalidateTime: 1800         #session失效时间 单位为秒
-    anonUrl: /pc/**,/login,/kaptcha #无需登录访问地址
+    anonUrl: /pc/**,/login,/kaptcha,/vueLogin #无需登录访问地址
     openSwagger: true
     termsOfServiceUrl: http://localhost  #开启swgger的接口文档
 log:

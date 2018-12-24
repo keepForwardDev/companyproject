@@ -15,7 +15,7 @@ public class Router implements Serializable{
     private String path;
 
     /**
-     * 菜单id
+     * 菜单 code
      */
     private String name;
 
@@ -29,9 +29,20 @@ public class Router implements Serializable{
 
     /**
      *
-     * 前端组件地址 例如 @/view/login/login.vue
+     * 前端组件地址 例如 view/login/login.vue
      */
     private String component;
+
+    /**
+     * 菜单名称
+     */
+    private String title;
+
+    private Long id;
+
+    private Long parentId;
+
+    private Integer sort;
 
     public String getPath() {
         return path;
@@ -71,5 +82,37 @@ public class Router implements Serializable{
 
     public void setComponent(String component) {
         this.component = component;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 }

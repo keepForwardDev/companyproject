@@ -42,7 +42,7 @@ public class Menu extends CommonModel<Menu> {
     private String meta;
 
     /**
-     * 前端组件地址 例如 @/view/login/login.vue
+     * 前端组件地址 例如 view/login/login.vue
      */
     private String component;
 

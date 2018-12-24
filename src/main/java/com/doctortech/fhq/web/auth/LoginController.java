@@ -7,13 +7,13 @@ import com.doctortech.framework.common.exception.InvalidKaptchaException;
 import com.doctortech.framework.common.shiro.ShiroKit;
 import com.doctortech.framework.common.shiro.ShiroUser;
 import com.doctortech.framework.config.properties.CustomProperties;
-import com.doctortech.framework.consts.Const;
 import com.google.code.kaptcha.Constants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.CredentialsException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +33,7 @@ public class LoginController extends BaseController {
 
     @Autowired
     private MenuService menuService;
+
     /**
      * 跳转到主页
      */
@@ -40,6 +41,7 @@ public class LoginController extends BaseController {
     public String index(Model model) {
         return "/index";
     }
+
     /**
      * 跳转到登录页面
      */
@@ -56,7 +58,7 @@ public class LoginController extends BaseController {
      * 点击登录执行的动作
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String clientLogin(String userName,String password,String kaptcha) {
+    public String clientLogin(String userName, String password, String kaptcha) {
         //验证验证码是否正确
         if (customProperties.getOpenkaptcha()) {
             String code = (String) super.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
@@ -77,38 +79,54 @@ public class LoginController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/vueLogin",method = RequestMethod.POST)
-    public CommonRespon vueLogin(String userName,String password) {
-        Subject currentUser = ShiroKit.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(userName, password.toCharArray());
-        token.setRememberMe(false);
-        currentUser.login(token);
-        ShiroUser shiroUser = ShiroKit.getUser();
-        super.getSession().setAttribute("shiroUser", shiroUser);
-        super.getSession().setAttribute("userName", shiroUser.getAccount());
-        ShiroKit.getSession().setAttribute("sessionFlag", true);
-        CommonRespon res= success();
-        res.setData(super.getSession().getId());
-        return res;
+    @RequestMapping(value = "/vueLogin", method = RequestMethod.POST)
+    public CommonRespon vueLogin(String userName, String password) {
+        CommonRespon responese;
+        try {
+            Subject currentUser = ShiroKit.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(userName, password.toCharArray());
+            token.setRememberMe(false);
+            currentUser.login(token);
+            ShiroUser shiroUser = ShiroKit.getUser();
+            super.getSession().setAttribute("shiroUser", shiroUser);
+            super.getSession().setAttribute("userName", shiroUser.getAccount());
+            ShiroKit.getSession().setAttribute("sessionFlag", true);
+            CommonRespon res = success();
+            res.setData(super.getSession().getId());
+            return res;
+        } catch (InvalidKaptchaException e) {
+            responese = faild();
+            responese.setMsg("验证码错误");
+        } catch (CredentialsException e) {
+            responese = faild();
+            responese.setMsg("账号或者密码错误");
+        } catch (DisabledAccountException e) {
+            responese = faild();
+            responese.setMsg("账号被冻结");
+        } catch (AuthenticationException e) {
+            responese = noLogin();
+        }
+        return responese;
     }
 
     @ResponseBody
-    @RequestMapping(value="/getUserInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public CommonRespon getUserInfo() {
+        CommonRespon responese;
         ShiroUser currentUser = getCurrentUser();
-        Map<String,Object> res= new HashMap<>();
-        res.put("userName",currentUser.getName());
-        res.put("avtar",currentUser.getAvatar());
-        List<String> access= new ArrayList<>();
-        currentUser.getMenu().forEach(m ->{
+        Map<String, Object> res = new HashMap<>();
+        res.put("userName", currentUser.getName());
+        res.put("avatar", currentUser.getAvatar());
+        List<String> access = new ArrayList<>();
+        currentUser.getMenu().forEach(m -> {
             access.add(m.getName());
         });
-        res.put("resources",currentUser.getResourcesCode());
-        res.put("access",access);
-        res.put("userId",currentUser.getId());
-        res.put("departmentName",currentUser.getDepartmentName());
-        res.put("roleName",currentUser.getRoleName());
-        CommonRespon responese= success();
+        res.put("resources", currentUser.getResourcesCode());
+        res.put("access", access);
+        res.put("userId", currentUser.getId());
+        res.put("departmentName", currentUser.getDepartmentName());
+        res.put("roleName", currentUser.getRoleName());
+        responese = success();
         responese.setData(res);
         return responese;
     }

@@ -1,7 +1,10 @@
 package com.doctortech;
 
+import com.doctortech.framework.common.shiro.ShiroKit;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -27,6 +30,8 @@ import java.util.Date;
  *
  */
 @SpringBootApplication
+@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class, org.activiti.spring.boot.SecurityAutoConfiguration.class//禁用 activi 登录功能
+})
 public class MainApplication extends SpringBootServletInitializer implements EmbeddedServletContainerCustomizer{
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
