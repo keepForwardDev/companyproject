@@ -1,6 +1,7 @@
 package com.doctortech.fhq.bean;
 
 import com.alibaba.fastjson.JSONObject;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,11 +13,13 @@ public class Router implements Serializable{
     /**
      * 访问地址
      */
+    @NotBlank(message = "访问地址必须填写")
     private String path;
 
     /**
      * 菜单 code
      */
+    @NotBlank(message = "菜单唯一标识必须填写")
     private String name;
 
     /**
@@ -31,11 +34,13 @@ public class Router implements Serializable{
      *
      * 前端组件地址 例如 view/login/login.vue
      */
+    @NotBlank(message = "组件地址必须填写")
     private String component;
 
     /**
      * 菜单名称
      */
+    @NotBlank(message = "菜单名称必须填写")
     private String title;
 
     private Long id;

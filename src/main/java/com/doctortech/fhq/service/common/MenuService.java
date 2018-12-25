@@ -6,12 +6,15 @@ import com.doctortech.fhq.bean.Router;
 import com.doctortech.fhq.entity.jpa.common.Menu;
 import com.doctortech.fhq.repository.mapper.common.MenuMapper;
 import com.doctortech.fhq.utils.SqlHelper;
+import com.doctortech.framework.common.shiro.ShiroKit;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,5 +99,25 @@ public class MenuService {
             routers.add(getRouter(p,child));
         });
         return routers;
+    }
+
+    public void saveOrUpdateMenu(Router r) {
+        Menu menu= new Menu();
+        BeanUtils.copyProperties(r,menu);
+        menu.setMeta(r.getMeta().toJSONString());
+        menu.setCode(r.getName());
+        if (menu.getId()!=null) {
+            menu.setUpdateTime(new Date());
+            menu.setUpdateUserId(ShiroKit.getUser().getId());
+            menuDao.updateById(menu);
+        } else {
+            menu.setCreateTime(new Date());
+            menu.setCreateUserId(ShiroKit.getUser().getId());
+            menuDao.insert(menu);
+        }
+    }
+
+    public void delete(Long id) {
+        menuDao.deleteById(id);
     }
 }
