@@ -3,6 +3,7 @@ package com.doctortech.fhq.service.common;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.doctortech.fhq.bean.Router;
+import com.doctortech.fhq.bean.TreeNode;
 import com.doctortech.fhq.entity.jpa.common.Menu;
 import com.doctortech.fhq.repository.mapper.common.MenuMapper;
 import com.doctortech.fhq.utils.SqlHelper;
@@ -99,6 +100,44 @@ public class MenuService {
             routers.add(getRouter(p,child));
         });
         return routers;
+    }
+
+    /**
+     * get zTree nodes
+     * @return
+     */
+    public List<TreeNode> getMenuTree() {
+
+        List<TreeNode> nodes= new ArrayList<>();
+        QueryWrapper<Menu> condition = new QueryWrapper<>();
+        condition.orderByAsc("sort");
+        List<Menu> list= menuDao.selectList(condition);
+        //根节点
+        List<Menu> parents= list.stream().filter(m->m.getParentId()==null).collect(Collectors.toList());
+        //子节点
+        List<Menu> child= list.stream().filter(m->m.getParentId()!=null).collect(Collectors.toList());
+        if (parents.isEmpty()) {
+            return nodes;
+        }
+        parents.forEach(p->{
+            nodes.add(getTreeNode(p,child));
+        });
+        return nodes;
+    }
+
+    private TreeNode getTreeNode(Menu parent ,List<Menu> all) {
+        TreeNode node= new TreeNode();
+        node.setName(parent.getTitle());
+        node.setParentId(parent.getParentId());
+        node.setId(parent.getId());
+        List<TreeNode> children = new ArrayList<>();
+        all.forEach(m->{
+            if (parent.getId().longValue()==m.getParentId().longValue()) {
+                children.add(getTreeNode(m,all));
+            }
+        });
+        node.setChildren(children);
+        return node;
     }
 
     public void saveOrUpdateMenu(Router r) {
