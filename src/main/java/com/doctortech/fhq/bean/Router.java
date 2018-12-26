@@ -49,6 +49,7 @@ public class Router implements Serializable{
 
     private Integer sort;
 
+    private boolean expand= true;
     public String getPath() {
         return path;
     }
@@ -119,5 +120,9 @@ public class Router implements Serializable{
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public boolean isExpand() {
+        return expand;
     }
 }

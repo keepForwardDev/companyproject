@@ -1,9 +1,8 @@
 package com.doctortech.fhq.utils;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.access.method.P;
+
+import java.util.List;
 
 public class SqlHelper {
     
