@@ -18,6 +18,19 @@
         <result column="create_user_id" property="createUserId" />
         <result column="update_user_id" property="updateUserId" />
     </resultMap>
+    <!--资源菜单 -->
+    <resultMap id="menuRes" type="com.doctortech.fhq.bean.MenuResources">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="sort" property="sort" />
+        <result column="description" property="description" />
+        <result column="menu_id" property="menuId" />
+        <result column="menu_name" property="menuName" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
 
     <sql id="Base_Column_List">
         id,code,url,name,description,sort,menu_id, deleted, version,create_time,
@@ -36,5 +49,19 @@
         )
         order by create_time, sort asc
     </select>
-
+    <select id="getMenuRes" resultMap="menuRes" parameterType="com.doctortech.fhq.bean.MenuResources">
+        select s.*,m.id as menu_id,m.title as menu_name from sys_resource s left join sys_menu m on s.menu_id= m.id where s.deleted=0 and m.deleted=0
+        <if test="res.name!=null and res.name!='' ">
+            and s.name like #{res.name} escape '/'
+        </if>
+        <if test="res.url!=null and res.url!='' ">
+            and s.url like #{res.url} escape '/'
+        </if>
+        <if test="res.menuName!=null and res.menuName!='' ">
+            and m.title like #{res.menuName} escape '/'
+        </if>
+        <if test="res.code!=null and res.code!='' ">
+            and m.code like #{res.code} escape '/'
+        </if>
+    </select>
 </mapper>

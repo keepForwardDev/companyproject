@@ -2,10 +2,15 @@ package com.doctortech.fhq.service.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.doctortech.fhq.bean.MenuResources;
 import com.doctortech.fhq.bean.Router;
 import com.doctortech.fhq.bean.TreeNode;
 import com.doctortech.fhq.entity.jpa.common.Menu;
+import com.doctortech.fhq.entity.jpa.common.Resource;
 import com.doctortech.fhq.repository.mapper.common.MenuMapper;
+import com.doctortech.fhq.repository.mapper.common.ResourceMapper;
 import com.doctortech.fhq.utils.SqlHelper;
 import com.doctortech.framework.common.shiro.ShiroKit;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +29,9 @@ import java.util.stream.Collectors;
 public class MenuService {
     @Autowired
     private MenuMapper menuDao;
+
+    @Autowired
+    private ResourceMapper resourceMapper;
     /**
      * 获取用户菜单
      * @param rolesId
@@ -141,15 +149,25 @@ public class MenuService {
     }
 
     public void saveOrUpdateMenu(Router r) {
-        Menu menu= new Menu();
-        BeanUtils.copyProperties(r,menu);
-        menu.setMeta(r.getMeta().toJSONString());
-        menu.setCode(r.getName());
-        if (menu.getId()!=null) {
-            menu.setUpdateTime(new Date());
-            menu.setUpdateUserId(ShiroKit.getUser().getId());
-            menuDao.updateById(menu);
+        if (r.getId()!=null) {
+            Menu m= menuDao.selectById(r.getId());
+            if (m!=null) {
+                m.setCode(m.getCode());
+                m.setMeta(m.getMeta());
+                m.setSort(r.getSort());
+                m.setComponent(r.getComponent());
+                m.setParentId(r.getParentId());
+                m.setPath(r.getPath());
+                m.setTitle(r.getTitle());
+                m.setUpdateTime(new Date());
+                m.setUpdateUserId(ShiroKit.getUser().getId());
+                menuDao.updateById(m);
+            }
         } else {
+            Menu menu= new Menu();
+            BeanUtils.copyProperties(r,menu);
+            menu.setMeta(r.getMeta().toJSONString());
+            menu.setCode(r.getName());
             menu.setCreateTime(new Date());
             menu.setCreateUserId(ShiroKit.getUser().getId());
             menuDao.insert(menu);
@@ -158,5 +176,14 @@ public class MenuService {
 
     public void delete(Long id) {
         menuDao.deleteById(id);
+    }
+
+
+    public IPage<MenuResources> getMenuResources(MenuResources res, Page<MenuResources> page) {
+        res.setMenuName(SqlHelper.getSqlLikeParams(res.getMenuName()));
+        res.setUrl(SqlHelper.getSqlLikeParams(res.getUrl()));
+        res.setCode(SqlHelper.getSqlLikeParams(res.getCode()));
+        res.setName(SqlHelper.getSqlLikeParams(res.getName()));
+        return resourceMapper.getMenuRes(page,res);
     }
 }

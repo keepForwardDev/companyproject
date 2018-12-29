@@ -1,5 +1,7 @@
 package com.doctortech.fhq.web.auth;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.doctortech.fhq.bean.MenuResources;
 import com.doctortech.fhq.bean.Router;
 import com.doctortech.fhq.service.common.MenuService;
 import com.doctortech.fhq.web.BaseController;
@@ -72,5 +74,13 @@ public class MenuController extends BaseController{
     public CommonRespon deleteMenu(Long id) {
         menuService.delete(id);
         return success();
+    }
+
+    @RequestMapping(value = "/menuResources",method = RequestMethod.POST)
+    @ResponseBody
+    public CommonRespon getMenuResources(MenuResources rs,Page<MenuResources> page) {
+        CommonRespon res= success();
+        res.setData(menuService.getMenuResources(rs,page));
+        return res;
     }
 }
