@@ -76,11 +76,4 @@ public class MenuController extends BaseController{
         return success();
     }
 
-    @RequestMapping(value = "/menuResources",method = RequestMethod.POST)
-    @ResponseBody
-    public CommonRespon getMenuResources(MenuResources rs,Page<MenuResources> page) {
-        CommonRespon res= success();
-        res.setData(menuService.getMenuResources(rs,page));
-        return res;
-    }
 }

@@ -6,6 +6,7 @@ import com.doctortech.fhq.service.common.RoleService;
 import com.doctortech.fhq.web.BaseController;
 import com.doctortech.framework.bean.CommonRespon;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +25,9 @@ public class RoleController extends BaseController {
         try {
             roleService.addOrUpdate(id,name,code,description);
             res= success();
+        } catch (DuplicateKeyException e) {
+            res= faild();
+            res.setMsg("该资源编码已存在，请重新输入！");
         } catch (Exception e) {
             res= faild();
         }
