@@ -135,9 +135,12 @@ public class LoginController extends BaseController {
      * 退出登录
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logOut() {
+    @ResponseBody
+    public CommonRespon logOut() {
         ShiroKit.getSubject().logout();
-        return REDIRECT + "/login";
+        CommonRespon res= success();
+       // return REDIRECT + "/login";
+        return res;
     }
 
 }

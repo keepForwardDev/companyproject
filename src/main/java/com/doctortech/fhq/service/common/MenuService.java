@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.doctortech.fhq.bean.MenuResTree;
 import com.doctortech.fhq.bean.MenuResources;
 import com.doctortech.fhq.bean.Router;
 import com.doctortech.fhq.bean.TreeNode;
 import com.doctortech.fhq.entity.jpa.common.Menu;
-import com.doctortech.fhq.entity.jpa.common.Resource;
 import com.doctortech.fhq.repository.mapper.common.MenuMapper;
 import com.doctortech.fhq.repository.mapper.common.ResourceMapper;
 import com.doctortech.fhq.utils.SqlHelper;
@@ -131,6 +131,27 @@ public class MenuService {
             nodes.add(getTreeNode(p,child));
         });
         return nodes;
+    }
+
+    public List<TreeNode> getMenuResTree() {
+        List<TreeNode> nodes= new ArrayList<>();
+        List<MenuResTree> tree= menuDao.selectMenuResTree();
+        //根节点
+        List<MenuResTree> parents= tree.stream().filter(m->m.getParentId()==null).collect(Collectors.toList());
+        //子节点
+        List<MenuResTree> child= tree.stream().filter(m->m.getParentId()!=null).collect(Collectors.toList());
+        if (parents.isEmpty()) {
+            return nodes;
+        }
+        parents.forEach(p->{
+            nodes.add(getTreeResNode(p,child));
+        });
+        return nodes;
+    }
+
+    private TreeNode getTreeResNode(MenuResTree parent, List<MenuResTree> all) {
+        TreeNode node= new TreeNode();
+        return node;
     }
 
     private TreeNode getTreeNode(Menu parent ,List<Menu> all) {

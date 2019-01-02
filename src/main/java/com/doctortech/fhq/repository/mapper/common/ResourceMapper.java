@@ -13,5 +13,5 @@ public interface ResourceMapper extends BaseMapper<Resource> {
 
     public List<Resource> getRoleResources(@Param("roleIds") List<Long> roleIds);
 
-    public IPage<MenuResources> getMenuRes(Page<MenuResources> page,@Param("res") MenuResources res);
+    public IPage<MenuResources> getMenuRes(Page<MenuResources> page, @Param("res") MenuResources res);
 }

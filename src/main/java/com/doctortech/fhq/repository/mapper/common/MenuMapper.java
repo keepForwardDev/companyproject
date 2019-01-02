@@ -1,6 +1,7 @@
 package com.doctortech.fhq.repository.mapper.common;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.doctortech.fhq.bean.MenuResTree;
 import com.doctortech.fhq.entity.jpa.common.Menu;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     public List<Menu> selectUserMenus(@Param("roleIds") List<Long> roleIds);
+
+    public List<MenuResTree> selectMenuResTree();
 }

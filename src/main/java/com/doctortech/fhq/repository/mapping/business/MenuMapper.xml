@@ -19,6 +19,14 @@
         <result column="update_user_id" property="updateUserId" />
     </resultMap>
 
+    <resultMap id="treeMap" type="com.doctortech.fhq.bean.MenuResTree">
+        <id column="id" property="id" />
+        <id column="name" property="name" />
+        <id column="parent_id" property="parentId" />
+        <id column="res_id" property="resId" />
+        <id column="res_name" property="resName" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, title, parent_id, code,path,meta,component, sort, icon, deleted, version,create_time,
         update_time, create_user_id,update_user_id
@@ -37,4 +45,11 @@
         order by sort asc
     </select>
 
+    <select id="selectMenuResTree" resultMap="treeMap">
+        select
+        m.id,m.title name,m.parent_id,r.id as res_id,r.name as res_name
+        from sys_menu m left join sys_resource r on m.id= r.menu_id
+        where deleted=0
+        order by m.sort asc ,r.sort asc
+    </select>
 </mapper>

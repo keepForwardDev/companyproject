@@ -18,6 +18,8 @@ public class TreeNode {
      */
     private boolean checked=false;
 
+    private boolean chkDisabled= false;
+
     private List<TreeNode> children=new ArrayList<>();
 
     public Long getId() {
@@ -66,5 +68,13 @@ public class TreeNode {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public boolean isChkDisabled() {
+        return chkDisabled;
+    }
+
+    public void setChkDisabled(boolean chkDisabled) {
+        this.chkDisabled = chkDisabled;
     }
 }
