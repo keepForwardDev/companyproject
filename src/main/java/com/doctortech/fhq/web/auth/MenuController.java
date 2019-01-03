@@ -55,6 +55,14 @@ public class MenuController extends BaseController{
         return res;
     }
 
+    @RequestMapping(value = "/menuResTree",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonRespon menuResTree() {
+        CommonRespon res= success();
+        res.setData(menuService.getMenuResTree());
+        return res;
+    }
+
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
     public CommonRespon saveMenu(@RequestBody @Valid Router r, BindingResult result) {

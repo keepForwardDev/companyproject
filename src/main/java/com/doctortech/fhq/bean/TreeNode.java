@@ -20,7 +20,7 @@ public class TreeNode {
 
     private boolean chkDisabled= false;
 
-    private List<TreeNode> children=new ArrayList<>();
+    private List<TreeNode> children;
 
     public Long getId() {
         return id;

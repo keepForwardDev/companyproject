@@ -69,4 +69,26 @@ public class ResourcesController extends BaseController{
         resourcesService.delete(id);
         return res;
     }
+
+    @RequestMapping(value = "/roleRes",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonRespon resourcesRole(Long id) {
+        if (id==null) {
+            return faild();
+        }
+        CommonRespon res = success();
+        res.setData(resourcesService.getRoleRes(id));
+        return res;
+    }
+
+    @RequestMapping(value = "/menuRes",method = RequestMethod.GET)
+    @ResponseBody
+    public CommonRespon menuRole(Long id) {
+        if (id==null) {
+            return faild();
+        }
+        CommonRespon res = success();
+        res.setData(resourcesService.getMenuRes(id));
+        return res;
+    }
 }

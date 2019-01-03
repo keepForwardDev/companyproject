@@ -116,7 +116,7 @@ public class MenuService {
 
     /**
      * get zTree nodes
-     *
+     * 菜单树
      * @return
      */
     public List<TreeNode> getMenuTree() {
@@ -138,6 +138,10 @@ public class MenuService {
         return nodes;
     }
 
+    /**
+     * 资源树
+     * @return
+     */
     public List<TreeNode> getMenuResTree() {
         List<TreeNode> nodes = new ArrayList<>();
         List<MenuResTree> tree = menuDao.selectMenuResTree();
@@ -161,13 +165,13 @@ public class MenuService {
         TreeNode node = null;
         for (MenuResTree tree : res) {
             if (flag == tree.getId().longValue()) {
-                newResTreeNode(node,tree);
+                newResTreeNode(node,tree);// 各资源添加到菜单下面
             } else {
                 node = new TreeNode();
                 node.setName(tree.getName());
                 node.setParentId(tree.getParentId());
                 node.setId(tree.getId());
-                node.setChkDisabled(true);
+                //node.setChkDisabled(true);
                 if (tree.getResId() != null) {
                     newResTreeNode(node,tree);
                 }
@@ -179,22 +183,37 @@ public class MenuService {
     }
 
     private TreeNode newResTreeNode(TreeNode node,MenuResTree res) {
+        List<TreeNode> nodes= null;
+        if (node.getChildren()!=null) {
+            nodes = node.getChildren();
+        } else {
+            nodes= new ArrayList<>();
+        }
         TreeNode resource = new TreeNode();
         resource.setId(-res.getResId());
         resource.setName(res.getResName());
         resource.setParentId(res.getId());
-        node.getChildren().add(resource);
+        nodes.add(resource);
+        node.setChildren(nodes);
         return node;
     }
 
     private TreeNode getTreeResNode(TreeNode parent, List<TreeNode> all) {
-        List<TreeNode> children = parent.getChildren();
+        List<TreeNode> children = null;
+        if (parent.getChildren()!=null) {
+            children = parent.getChildren();
+        } else {
+            children= new ArrayList<>();
+        }
         int index = 0;
         for (TreeNode t : all) {
             if (parent.getId().longValue() == t.getParentId().longValue()) {
                 children.add(index, getTreeResNode(t, all));
                 index++;
             }
+        }
+        if (children.size()>0) {
+            parent.setChildren(children);
         }
         return parent;
     }
@@ -204,32 +223,36 @@ public class MenuService {
         node.setName(parent.getTitle());
         node.setParentId(parent.getParentId());
         node.setId(parent.getId());
-        List<TreeNode> children = node.getChildren();
-        all.forEach(m -> {
-            if (parent.getId().longValue() == m.getParentId().longValue()) {
-                children.add(getTreeNode(m, all));
+        List<TreeNode> children = new ArrayList<>();
+        all.forEach(m->{
+            if (parent.getId().longValue()==m.getParentId().longValue()) {
+                children.add(getTreeNode(m,all));
             }
         });
+        if (children.size()>0) {
+            node.setChildren(children);
+        }
         return node;
     }
 
     public void saveOrUpdateMenu(Router r) {
+        Menu menu = null;
         if (r.getId() != null) {
-            Menu m = menuDao.selectById(r.getId());
-            if (m != null) {
-                m.setCode(m.getCode());
-                m.setMeta(m.getMeta());
-                m.setSort(r.getSort());
-                m.setComponent(r.getComponent());
-                m.setParentId(r.getParentId());
-                m.setPath(r.getPath());
-                m.setTitle(r.getTitle());
-                m.setUpdateTime(new Date());
-                m.setUpdateUserId(ShiroKit.getUser().getId());
-                menuDao.updateById(m);
+            menu = menuDao.selectById(r.getId());
+            if (menu != null) {
+                menu.setCode(menu.getCode());
+                menu.setMeta(menu.getMeta());
+                menu.setSort(r.getSort());
+                menu.setComponent(r.getComponent());
+                menu.setParentId(r.getParentId());
+                menu.setPath(r.getPath());
+                menu.setTitle(r.getTitle());
+                menu.setUpdateTime(new Date());
+                menu.setUpdateUserId(ShiroKit.getUser().getId());
+                menuDao.updateById(menu);
             }
         } else {
-            Menu menu = new Menu();
+            menu= new Menu();
             BeanUtils.copyProperties(r, menu);
             menu.setMeta(r.getMeta().toJSONString());
             menu.setCode(r.getName());

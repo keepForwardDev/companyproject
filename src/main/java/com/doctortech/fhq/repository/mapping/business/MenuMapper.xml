@@ -49,7 +49,7 @@
         select
         m.id,m.title name,m.parent_id,r.id as res_id,r.name as res_name
         from sys_menu m left join sys_resource r on m.id= r.menu_id
-        where deleted=0
+        where m.deleted=0
         order by m.sort asc ,r.sort asc
     </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.doctortech.fhq.web.auth;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.doctortech.fhq.bean.RoleBean;
+import com.doctortech.fhq.bean.RoleResourcesBean;
 import com.doctortech.fhq.service.common.RoleService;
 import com.doctortech.fhq.web.BaseController;
 import com.doctortech.framework.bean.CommonRespon;
@@ -20,10 +21,10 @@ public class RoleController extends BaseController {
 
     @RequestMapping("save")
     @ResponseBody
-    public CommonRespon addOrUpdate(Long id,String name,String code,String description) {
+    public CommonRespon addOrUpdate(RoleResourcesBean bean) {
         CommonRespon res;
         try {
-            roleService.addOrUpdate(id,name,code,description);
+            roleService.addOrUpdate(bean);
             res= success();
         } catch (DuplicateKeyException e) {
             res= faild();
