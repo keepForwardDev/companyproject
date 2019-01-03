@@ -240,8 +240,8 @@ public class MenuService {
         if (r.getId() != null) {
             menu = menuDao.selectById(r.getId());
             if (menu != null) {
-                menu.setCode(menu.getCode());
-                menu.setMeta(menu.getMeta());
+                menu.setCode(r.getName());
+                menu.setMeta(r.getMeta().toJSONString());
                 menu.setSort(r.getSort());
                 menu.setComponent(r.getComponent());
                 menu.setParentId(r.getParentId());
