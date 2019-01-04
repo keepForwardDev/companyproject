@@ -59,6 +59,7 @@ public class ShiroConfig {
     public DefaultWebSessionManager defaultWebSessionManager(CacheManager cacheShiroManager, CustomProperties customProperties) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setCacheManager(cacheShiroManager);
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         sessionManager.setSessionValidationInterval(customProperties.getSessionValidationInterval() * 1000);
         sessionManager.setGlobalSessionTimeout(customProperties.getSessionInvalidateTime() * 1000);
         sessionManager.setDeleteInvalidSessions(true);

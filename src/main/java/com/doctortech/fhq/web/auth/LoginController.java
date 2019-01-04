@@ -38,9 +38,9 @@ public class LoginController extends BaseController {
     /**
      * 跳转到主页
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/","#"}, method = RequestMethod.GET)
     public String index(Model model) {
-        return "/index";
+        return "/admin/index";
     }
 
     /**
@@ -51,7 +51,7 @@ public class LoginController extends BaseController {
         if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
             return REDIRECT + "/";
         } else {
-            return "/login";
+            return "/admin/index";
         }
     }
 
