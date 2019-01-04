@@ -7,6 +7,7 @@ import com.doctortech.framework.common.exception.InvalidKaptchaException;
 import com.doctortech.framework.common.shiro.ShiroKit;
 import com.doctortech.framework.common.shiro.ShiroUser;
 import com.doctortech.framework.config.properties.CustomProperties;
+import com.doctortech.framework.consts.Const;
 import com.google.code.kaptcha.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -80,9 +81,14 @@ public class LoginController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/vueLogin", method = RequestMethod.POST)
-    public CommonRespon vueLogin(String userName, String password) {
+    public CommonRespon vueLogin(String userName, String password,String kaptcha) {
         CommonRespon responese;
         try {
+
+            String code = (String) super.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY);
+            if (!StringUtils.isEmpty(kaptcha) && !kaptcha.equalsIgnoreCase(code)) {
+                throw new InvalidKaptchaException();
+            }
             Subject currentUser = ShiroKit.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(userName, password.toCharArray());
             token.setRememberMe(false);
@@ -100,6 +106,12 @@ public class LoginController extends BaseController {
         } catch (CredentialsException e) {
             responese = faild();
             responese.setMsg("账号或者密码错误");
+            Integer errorTimes = getSession().getAttribute("errorTimes") ==null?0: (Integer)getSession().getAttribute("errorTimes");
+            if (errorTimes >= Const.LOGIN_MAX_NUM) {
+                responese.setData(true);
+            }
+            errorTimes = errorTimes+1;
+            getSession().setAttribute("errorTimes",errorTimes );
         } catch (DisabledAccountException e) {
             responese = faild();
             responese.setMsg("账号被冻结");
@@ -126,6 +138,7 @@ public class LoginController extends BaseController {
         res.put("userId", currentUser.getId());
         res.put("departmentName", currentUser.getDepartmentName());
         res.put("roleName", currentUser.getRoleName());
+        res.put("menu", currentUser.getMenu());
         responese = success();
         responese.setData(res);
         return responese;
