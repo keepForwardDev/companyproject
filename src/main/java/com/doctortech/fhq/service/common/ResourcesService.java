@@ -6,6 +6,7 @@ import com.doctortech.fhq.entity.jpa.common.MenuRole;
 import com.doctortech.fhq.entity.jpa.common.Resource;
 import com.doctortech.fhq.entity.jpa.common.RoleResource;
 import com.doctortech.fhq.repository.mapper.common.ResourceMapper;
+import com.doctortech.fhq.repository.mapper.common.RoleResourceMapper;
 import com.doctortech.framework.common.shiro.ShiroKit;
 import com.doctortech.framework.common.shiro.ShiroUser;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,9 @@ import java.util.List;
 public class ResourcesService {
     @Autowired
     private ResourceMapper resourceMapper;
+
+    @Autowired
+    private RoleResourceMapper roleResourceDao;
 
     public void saveOrUpdate(ResourcesBean bean) {
         Date now= new Date();
@@ -46,6 +50,9 @@ public class ResourcesService {
         for (String i : id.split(",")) {
             try {
                 resourceMapper.deleteById(Long.valueOf(i));
+                QueryWrapper<RoleResource> condition = new QueryWrapper<>();
+                condition.eq("resource_id",id);
+                roleResourceDao.delete(condition);
             } catch (Exception e) {
 
             }

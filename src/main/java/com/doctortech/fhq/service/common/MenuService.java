@@ -9,7 +9,9 @@ import com.doctortech.fhq.bean.MenuResources;
 import com.doctortech.fhq.bean.Router;
 import com.doctortech.fhq.bean.TreeNode;
 import com.doctortech.fhq.entity.jpa.common.Menu;
+import com.doctortech.fhq.entity.jpa.common.MenuRole;
 import com.doctortech.fhq.repository.mapper.common.MenuMapper;
+import com.doctortech.fhq.repository.mapper.common.MenuRoleMapper;
 import com.doctortech.fhq.repository.mapper.common.ResourceMapper;
 import com.doctortech.fhq.utils.SqlHelper;
 import com.doctortech.framework.common.shiro.ShiroKit;
@@ -33,6 +35,8 @@ public class MenuService {
     @Autowired
     private ResourceMapper resourceMapper;
 
+    @Autowired
+    private MenuRoleMapper menuRoleMapper;
     /**
      * 获取用户菜单
      *
@@ -264,6 +268,9 @@ public class MenuService {
 
     public void delete(Long id) {
         menuDao.deleteById(id);
+        QueryWrapper<MenuRole> condition = new QueryWrapper<>();
+        condition.eq("menu_id",id);
+        menuRoleMapper.delete(condition);
     }
 
 

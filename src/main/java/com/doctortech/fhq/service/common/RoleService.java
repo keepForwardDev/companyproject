@@ -10,6 +10,7 @@ import com.doctortech.fhq.entity.jpa.common.RoleResource;
 import com.doctortech.fhq.repository.mapper.common.MenuRoleMapper;
 import com.doctortech.fhq.repository.mapper.common.RoleMapper;
 import com.doctortech.fhq.repository.mapper.common.RoleResourceMapper;
+import com.doctortech.fhq.repository.mapper.common.UserRoleMapper;
 import com.doctortech.fhq.utils.SqlHelper;
 import com.doctortech.framework.common.shiro.ShiroKit;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +32,9 @@ public class RoleService {
 
     @Autowired
     private RoleResourceMapper roleResourceDao;
+
+    @Autowired
+    private UserRoleMapper userRoleDao;
 
     public void addOrUpdate(RoleResourcesBean bean) {
         Date now= new Date();
@@ -116,8 +120,14 @@ public class RoleService {
             return;
         }
         String[] idArray= ids.split(",");
+        Map<String,Object> columnMap = null;
         for (String id : idArray) {
+            columnMap= new HashMap<>();
+            columnMap.put("role_id",id);
             roleDao.deleteById(id);
+            userRoleDao.deleteByMap(columnMap);
+            roleResourceDao.deleteByMap(columnMap);
+            menuRoleDao.deleteByMap(columnMap);
         }
     }
 
